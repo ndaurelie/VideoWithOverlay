@@ -18,20 +18,23 @@ class ViewController: UIViewController {
         // This is how much Overlay square represents versus the video height
         static let percentageOverlayVsVideo: CGFloat = 0.8
         
+        // Color for all overlay texts
+        static let overlayTextsColor = UIColor.green.cgColor
+        
         // Vertical section of overlay dedicated to personName
-        static let verticalPercentPersonName: CGFloat = 0.23
+        static let verticalPercentPersonName: CGFloat = 0.22
         
         // Vertical section of overlay dedicated to part one text
-        static let verticalPercentForPartOne: CGFloat = 0.19
+        static let verticalPercentForPartOne: CGFloat = 0.22
         
         // Vertical section of overlay dedicated to part two text
-        static let verticalPercentForPartTwo: CGFloat = 0.23
+        static let verticalPercentForPartTwo: CGFloat = 0.22
         
         // Vertical section of overlay dedicated to bottom texts
-        static let verticalPercentBottomTexts: CGFloat = 0.35
+        static let verticalPercentBottomTexts: CGFloat = 0.34
         
         // In bottom texts, horizontal section of overlay dedicated to main bottom text (for work place)
-        static let bottomHorizontalRightPart: CGFloat = 0.87
+        static let bottomHorizontalRightPart: CGFloat = 0.90
     }
     
     var firstVideoURL: URL?
@@ -142,18 +145,82 @@ class ViewController: UIViewController {
         
         let overlaySide = Constant.percentageOverlayVsVideo * min(videoSize.width, videoSize.height)
 
-        let testTextLayer = CATextLayer()
-        testTextLayer.frame = CGRect.init(x: 0, y: 0, width: overlaySide, height: overlaySide*Constant.verticalPercentPersonName)
-        testTextLayer.fontSize = 40
-        testTextLayer.alignmentMode = .center
-        testTextLayer.string = TextPartsForOverlay.init().personName
-        testTextLayer.isWrapped = true
-        testTextLayer.backgroundColor = UIColor.clear.cgColor
-        testTextLayer.foregroundColor = UIColor.white.cgColor
+//        let testTextLayer = CATextLayer()
+//        testTextLayer.frame = CGRect.init(x: 0, y: 0, width: overlaySide, height: overlaySide*Constant.verticalPercentPersonName)
+//        testTextLayer.fontSize = 40
+//        testTextLayer.alignmentMode = .center
+//        testTextLayer.string = TextPartsForOverlay.init().personName
+//        testTextLayer.isWrapped = true
+//        testTextLayer.backgroundColor = UIColor.blue.cgColor
+//        testTextLayer.foregroundColor = UIColor.white.cgColor
+        
+        let topLayer = CATextLayer()
+        topLayer.frame = CGRect.init(x: 0,
+                                     y: overlaySide * (1 - Constant.verticalPercentPersonName),
+                                     width: overlaySide,
+                                     height: overlaySide * Constant.verticalPercentPersonName)
+        topLayer.fontSize = 100
+        topLayer.alignmentMode = .center
+        topLayer.string = TextPartsForOverlay.init().personName
+        topLayer.isWrapped = true
+        topLayer.foregroundColor = Constant.overlayTextsColor
+        
+        let partOneLayer = CATextLayer()
+        partOneLayer.frame = CGRect.init(x: 0,
+                                         y: overlaySide * (1 - Constant.verticalPercentPersonName - Constant.verticalPercentForPartOne),
+                                         width: overlaySide,
+                                         height: overlaySide * Constant.verticalPercentForPartOne)
+        partOneLayer.fontSize = 90
+        partOneLayer.alignmentMode = .center
+        partOneLayer.string = TextPartsForOverlay.init().partOne
+        partOneLayer.isWrapped = true
+        partOneLayer.foregroundColor = Constant.overlayTextsColor
+        
+        let partTwoLayer = CATextLayer()
+        partTwoLayer.frame = CGRect.init(x: 0,
+                                         y: overlaySide * Constant.verticalPercentBottomTexts,
+                                         width: overlaySide,
+                                         height: overlaySide * Constant.verticalPercentForPartTwo)
+        partTwoLayer.fontSize = 100
+        partTwoLayer.alignmentMode = .center
+        partTwoLayer.string = TextPartsForOverlay.init().partTwo
+        partTwoLayer.isWrapped = true
+        partTwoLayer.foregroundColor = Constant.overlayTextsColor
+        
+        let bottomLeftLayer = CATextLayer()
+        bottomLeftLayer.frame = CGRect.init(x: 0,
+                                            y: 0,
+                                            width: overlaySide * (1 - (Constant.bottomHorizontalRightPart * 1.03)),
+                                            height: overlaySide * Constant.verticalPercentBottomTexts)
+        bottomLeftLayer.fontSize = 40
+        bottomLeftLayer.alignmentMode = .natural
+        bottomLeftLayer.string = "C H E Z"
+        bottomLeftLayer.isWrapped = true
+        bottomLeftLayer.foregroundColor = Constant.overlayTextsColor
+        
+        let bottomMainLayer = CATextLayer()
+        bottomMainLayer.frame = CGRect.init(x: overlaySide * (1 - Constant.bottomHorizontalRightPart),
+                                            y: 0,
+                                            width: overlaySide * Constant.bottomHorizontalRightPart,
+                                            height: overlaySide * Constant.verticalPercentBottomTexts * 0.8)
+        bottomMainLayer.fontSize = 80
+        bottomMainLayer.alignmentMode = .center
+        bottomMainLayer.string = TextPartsForOverlay.init().workPlace
+        bottomMainLayer.isWrapped = true
+        bottomMainLayer.foregroundColor = Constant.overlayTextsColor
+        
         
         let overlayLayer = CALayer()
-        overlayLayer.addSublayer(testTextLayer)
-        overlayLayer.frame = CGRect.init(x: 0, y: 0, width: videoSize.width, height: videoSize.height)
+        overlayLayer.addSublayer(topLayer)
+        overlayLayer.addSublayer(partOneLayer)
+        overlayLayer.addSublayer(partTwoLayer)
+        overlayLayer.addSublayer(bottomLeftLayer)
+        overlayLayer.addSublayer(bottomMainLayer)
+        
+        overlayLayer.frame = CGRect.init(x: 0.5*(videoSize.width - overlaySide),
+                                         y: 0.5*(videoSize.height - overlaySide),
+                                         width: videoSize.width,
+                                         height: videoSize.height)
 //        overlayLayer.masksToBounds = true
 
         let parentLayer = CALayer()

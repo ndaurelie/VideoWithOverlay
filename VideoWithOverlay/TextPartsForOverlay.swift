@@ -14,7 +14,7 @@ struct TextPartsForOverlay {
     var personName: String = "MATHILDE"
     
     // First part of the text that will appear after seeing bars, between the bars
-    var partOne: String = "UX / UI"
+    var partOne: String = "★  UX / UI  ★"
     
     // Second part of the text, will appear just under the bars
     var partTwo: String = "DESIGNER"
