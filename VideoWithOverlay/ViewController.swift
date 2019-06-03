@@ -120,9 +120,11 @@ class ViewController: UIViewController {
         let mainInstruction = AVMutableVideoCompositionInstruction()
         mainInstruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: CMTimeAdd(firstAsset!.duration, secondAsset!.duration))
         
-        let firstInstruction = VideoHelper.videoCompositionInstruction(firstTrack, asset: firstAsset!)
+        let firstInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: firstTrack)
+//        let firstInstruction = VideoHelper.videoCompositionInstruction(firstTrack, asset: firstAsset!)
         firstInstruction.setOpacity(0.0, at: firstAsset!.duration)
-        let secondInstruction = VideoHelper.videoCompositionInstruction(secondTrack, asset: secondAsset!)
+        let secondInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: secondTrack)
+//        let secondInstruction = VideoHelper.videoCompositionInstruction(secondTrack, asset: secondAsset!)
         
         // Add instructions
         mainInstruction.layerInstructions = [firstInstruction, secondInstruction]
@@ -130,13 +132,14 @@ class ViewController: UIViewController {
         mainComposition.instructions = [mainInstruction]
         mainComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
         
-//        mainComposition.renderSize = videoSize
-        mainComposition.renderSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        let videoSize = secondTrack.naturalSize
+        mainComposition.renderSize = videoSize
+//        mainComposition.renderSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
         // 3 - I should add overlay animation
         
 //        let videoSize = secondTrack.naturalSize.applying(secondTrack.preferredTransform)
-        let videoSize = secondTrack.naturalSize
+        
         let overlaySide = Constant.percentageOverlayVsVideo * min(videoSize.width, videoSize.height)
 
         let testTextLayer = CATextLayer()
@@ -150,7 +153,7 @@ class ViewController: UIViewController {
         
         let overlayLayer = CALayer()
         overlayLayer.addSublayer(testTextLayer)
-        overlayLayer.frame = CGRect.init(x: 0, y: 0, width: overlaySide, height: overlaySide)
+        overlayLayer.frame = CGRect.init(x: 0, y: 0, width: videoSize.width, height: videoSize.height)
 //        overlayLayer.masksToBounds = true
 
         let parentLayer = CALayer()
