@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         static let percentageOverlayVsVideo: CGFloat = 0.8
         
         // Color for all overlay texts
-        static let overlayTextsColor = UIColor.green.cgColor
+        static let overlayTextsColor = UIColor.yellow.cgColor
         
         // Vertical section of overlay dedicated to personName
         static let verticalPercentPersonName: CGFloat = 0.22
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         static let verticalPercentBottomTexts: CGFloat = 0.34
         
         // In bottom texts, horizontal section of overlay dedicated to main bottom text (for work place)
-        static let bottomHorizontalRightPart: CGFloat = 0.90
+        static let bottomHorizontalRightPart: CGFloat = 0.92
     }
     
     var firstVideoURL: URL?
@@ -144,22 +144,13 @@ class ViewController: UIViewController {
 //        let videoSize = secondTrack.naturalSize.applying(secondTrack.preferredTransform)
         
         let overlaySide = Constant.percentageOverlayVsVideo * min(videoSize.width, videoSize.height)
-
-//        let testTextLayer = CATextLayer()
-//        testTextLayer.frame = CGRect.init(x: 0, y: 0, width: overlaySide, height: overlaySide*Constant.verticalPercentPersonName)
-//        testTextLayer.fontSize = 40
-//        testTextLayer.alignmentMode = .center
-//        testTextLayer.string = TextPartsForOverlay.init().personName
-//        testTextLayer.isWrapped = true
-//        testTextLayer.backgroundColor = UIColor.blue.cgColor
-//        testTextLayer.foregroundColor = UIColor.white.cgColor
         
         let topLayer = CATextLayer()
         topLayer.frame = CGRect.init(x: 0,
                                      y: overlaySide * (1 - Constant.verticalPercentPersonName),
                                      width: overlaySide,
                                      height: overlaySide * Constant.verticalPercentPersonName)
-        topLayer.fontSize = 100
+        topLayer.fontSize = 105
         topLayer.alignmentMode = .center
         topLayer.string = TextPartsForOverlay.init().personName
         topLayer.isWrapped = true
@@ -181,7 +172,7 @@ class ViewController: UIViewController {
                                          y: overlaySide * Constant.verticalPercentBottomTexts,
                                          width: overlaySide,
                                          height: overlaySide * Constant.verticalPercentForPartTwo)
-        partTwoLayer.fontSize = 100
+        partTwoLayer.fontSize = 105
         partTwoLayer.alignmentMode = .center
         partTwoLayer.string = TextPartsForOverlay.init().partTwo
         partTwoLayer.isWrapped = true
@@ -203,7 +194,7 @@ class ViewController: UIViewController {
                                             y: 0,
                                             width: overlaySide * Constant.bottomHorizontalRightPart,
                                             height: overlaySide * Constant.verticalPercentBottomTexts * 0.8)
-        bottomMainLayer.fontSize = 80
+        bottomMainLayer.fontSize = 77
         bottomMainLayer.alignmentMode = .center
         bottomMainLayer.string = TextPartsForOverlay.init().workPlace
         bottomMainLayer.isWrapped = true
@@ -230,14 +221,10 @@ class ViewController: UIViewController {
         parentLayer.addSublayer(videoLayer)
         parentLayer.addSublayer(overlayLayer)
 
-//        let layerComposition = AVMutableVideoComposition()
-//        layerComposition.frameDuration = CMTime(value: 1, timescale: 30)
-//        layerComposition.renderScale = 1.0
-//        layerComposition.renderSize = videoSize
         mainComposition.animationTool = AVVideoCompositionCoreAnimationTool.init(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
         
         
-        // I should use CABasicAnimation to animate sequences and include them in the overlay layers.
+        // TODO: I should use CABasicAnimation to animate sequences and include them in the overlay layers.
         
         // 4 - Get path
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
